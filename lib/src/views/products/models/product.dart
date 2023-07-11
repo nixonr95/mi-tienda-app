@@ -7,6 +7,7 @@ class Product {
   Id id = Isar.autoIncrement;
   late String name;
   late String description;
+  late String? barCode;
   late double price;
   late int quantity;
   late int categoryId;
@@ -17,5 +18,6 @@ class Product {
     required this.price,
     required this.quantity,
     required this.categoryId,
+    this.barCode,
   });
 }

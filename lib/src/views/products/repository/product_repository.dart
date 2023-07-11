@@ -39,4 +39,12 @@ class ProductRepository {
       await isar.products.delete(productId);
     });
   }
+
+  Future<Product?> getProductByBarCode(String barCode) async {
+    return await isar.products
+        .where()
+        .filter()
+        .barCodeEqualTo(barCode)
+        .findFirst();
+  }
 }

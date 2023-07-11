@@ -3,13 +3,15 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
+import '../../../shared/widgets/qr_scanner.dart';
 import '../../categories/providers/category_provider.dart';
 import '../models/product.dart';
 import '../providers/product_provider.dart';
 
 class ProductForm extends HookConsumerWidget {
   final Product? product;
-  ProductForm({super.key, this.product});
+  final String? barCode;
+  ProductForm({super.key, this.product, this.barCode});
 
   final productForm = FormGroup(
     {
@@ -18,6 +20,9 @@ class ProductForm extends HookConsumerWidget {
         validators: [Validators.required],
       ),
       'description': FormControl<String>(
+        value: '',
+      ),
+      'barCode': FormControl<String>(
         value: '',
       ),
       'price': FormControl<double>(
@@ -41,21 +46,17 @@ class ProductForm extends HookConsumerWidget {
     final categories = ref.watch(categoriesProvider);
     useEffect(
       () {
+        if (product == null && barCode != null) {
+          productForm.control('barCode').value = barCode;
+          return null;
+        }
         if (product == null) return null;
         productForm.control('name').value = product!.name;
         productForm.control('description').value = product!.description;
         productForm.control('price').value = product!.price;
         productForm.control('quantity').value = product!.quantity;
         productForm.control('categoryId').value = product!.categoryId;
-        return null;
-      },
-      [product],
-    );
-    useEffect(
-      () {
-        if (product == null) return null;
-        productForm.control('name').value = product!.name;
-        productForm.control('description').value = product!.description;
+        productForm.control('barCode').value = product!.barCode ?? barCode;
         return null;
       },
       [product],
@@ -73,6 +74,7 @@ class ProductForm extends HookConsumerWidget {
           price: productForm.control('price').value,
           quantity: productForm.control('quantity').value,
           categoryId: productForm.control('categoryId').value,
+          barCode: productForm.control('barCode').value,
         );
         await productRepository!.createUpdateProduct(newProduct);
         ref.refresh(productsProvider);
@@ -85,6 +87,7 @@ class ProductForm extends HookConsumerWidget {
       product!.price = productForm.control('price').value;
       product!.quantity = productForm.control('quantity').value;
       product!.categoryId = productForm.control('categoryId').value;
+      product!.barCode = productForm.control('barCode').value;
 
       await productRepository!.createUpdateProduct(product!);
       ref.refresh(productsProvider);
@@ -94,9 +97,10 @@ class ProductForm extends HookConsumerWidget {
     return ReactiveForm(
       formGroup: productForm,
       child: AlertDialog(
+        scrollable: true,
         title: Text(product == null ? 'Agregar producto' : 'Editar producto'),
         content: SizedBox(
-          height: 380,
+          height: 420,
           child: Column(
             children: [
               ReactiveTextField<String>(
@@ -140,6 +144,33 @@ class ProductForm extends HookConsumerWidget {
                   loading: () => const [],
                   error: (error, stack) => const [],
                 ),
+              ),
+              const SizedBox(height: 10.0),
+              ReactiveValueListenableBuilder(
+                formControlName: 'barCode',
+                builder: (context, control, child) {
+                  return ListTile(
+                    leading: const Icon(Icons.qr_code),
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    title: Text(
+                        control.value as String? ?? 'Agregar código de barras'),
+                    onTap: () async {
+                      await Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          return QrScanner(
+                            onScan: (result) async {
+                              productForm.control('barCode').value = result;
+                              Navigator.pop(context);
+                            },
+                          );
+                        },
+                      ));
+                    },
+                  );
+                },
               ),
             ],
           ),
