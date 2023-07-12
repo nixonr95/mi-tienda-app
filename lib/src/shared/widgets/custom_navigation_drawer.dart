@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../views/categories/screens/categories_screen.dart';
+import '../../views/clients/screens/clients_screen.dart';
 import '../../views/home/home.dart';
 import '../../views/products/products.dart';
 
@@ -61,6 +62,19 @@ class CustomNavigationDrawer extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacementNamed(
                   context, CategoriesScreen.routeName);
+            },
+          ),
+          ListTile(
+            tileColor: route == ClientsScreen.routeName
+                ? Colors.blue.shade50
+                : Colors.transparent,
+            title: Text('Clientes',
+                style: TextStyle(
+                    color: route == ClientsScreen.routeName
+                        ? Colors.blue
+                        : Colors.black)),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, ClientsScreen.routeName);
             },
           ),
         ],

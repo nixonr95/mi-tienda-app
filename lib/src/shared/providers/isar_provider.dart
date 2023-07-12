@@ -3,6 +3,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../views/categories/categories.dart';
+import '../../views/clients/models/client.dart';
 import '../../views/products/products.dart';
 
 part 'isar_provider.g.dart';
@@ -14,6 +15,7 @@ Future<Isar> isarInstance(FutureProviderRef ref) async {
     [
       ProductSchema,
       CategorySchema,
+      ClientSchema,
     ],
     directory: dir.path,
   );
