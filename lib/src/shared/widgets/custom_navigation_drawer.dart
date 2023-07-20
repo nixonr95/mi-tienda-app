@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../views/bills/bills.dart';
 import '../../views/categories/screens/categories_screen.dart';
 import '../../views/clients/screens/clients_screen.dart';
 import '../../views/home/home.dart';
@@ -75,6 +76,19 @@ class CustomNavigationDrawer extends StatelessWidget {
                         : Colors.black)),
             onTap: () {
               Navigator.pushReplacementNamed(context, ClientsScreen.routeName);
+            },
+          ),
+          ListTile(
+            tileColor: route == BillsScreen.routeName
+                ? Colors.blue.shade50
+                : Colors.transparent,
+            title: Text('Facturas',
+                style: TextStyle(
+                    color: route == BillsScreen.routeName
+                        ? Colors.blue
+                        : Colors.black)),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, BillsScreen.routeName);
             },
           ),
         ],

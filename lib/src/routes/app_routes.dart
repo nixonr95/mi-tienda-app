@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../views/bills/bills.dart';
+import '../views/bills/screens/bill_form_screen.dart';
 import '../views/categories/screens/categories_screen.dart';
 import '../views/clients/screens/clients_screen.dart';
 import '../views/home/home.dart';
@@ -13,5 +15,7 @@ class AppRoutes {
     ProductsScreen.routeName: (_) => const ProductsScreen(),
     CategoriesScreen.routeName: (_) => const CategoriesScreen(),
     ClientsScreen.routeName: (_) => const ClientsScreen(),
+    BillsScreen.routeName: (_) => const BillsScreen(),
+    BillFormScreen.routeName: (_) => const BillFormScreen(),
   };
 }
