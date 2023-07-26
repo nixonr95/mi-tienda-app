@@ -139,10 +139,14 @@ Bill _billDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Bill(
+    canBeEdited: reader.readBoolOrNull(offsets[0]) ?? true,
     clientDocument: reader.readString(offsets[1]),
     clientId: reader.readLong(offsets[2]),
     clientName: reader.readString(offsets[3]),
     description: reader.readString(offsets[5]),
+    editedDate: reader.readDateTimeOrNull(offsets[6]),
+    isPaid: reader.readBoolOrNull(offsets[7]) ?? false,
+    paymentDate: reader.readDateTimeOrNull(offsets[8]),
     products: reader.readObjectList<ProductBill>(
           offsets[9],
           ProductBillSchema.deserialize,
@@ -152,11 +156,7 @@ Bill _billDeserialize(
         [],
     total: reader.readDoubleOrNull(offsets[10]) ?? 0,
   );
-  object.canBeEdited = reader.readBool(offsets[0]);
-  object.editedDate = reader.readDateTimeOrNull(offsets[6]);
   object.id = id;
-  object.isPaid = reader.readBool(offsets[7]);
-  object.paymentDate = reader.readDateTimeOrNull(offsets[8]);
   return object;
 }
 
@@ -168,7 +168,7 @@ P _billDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readBool(offset)) as P;
+      return (reader.readBoolOrNull(offset) ?? true) as P;
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
@@ -182,7 +182,7 @@ P _billDeserializeProp<P>(
     case 6:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 7:
-      return (reader.readBool(offset)) as P;
+      return (reader.readBoolOrNull(offset) ?? false) as P;
     case 8:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 9:

@@ -1,7 +1,9 @@
 import 'package:isar/isar.dart';
+import 'package:meta/meta.dart';
 
 part 'bill.g.dart';
 
+@immutable
 @collection
 class Bill {
   Id id = Isar.autoIncrement;
@@ -23,8 +25,38 @@ class Bill {
     required this.clientDocument,
     required this.clientName,
     required this.products,
+    this.isPaid = false,
+    this.canBeEdited = true,
+    this.paymentDate,
+    this.editedDate,
     this.total = 0,
   });
+
+  Bill copyWith({
+    String? description,
+    int? clientId,
+    String? clientDocument,
+    String? clientName,
+    double? total,
+    bool? isPaid,
+    bool? canBeEdited,
+    DateTime? paymentDate,
+    DateTime? editedDate,
+    List<ProductBill>? products,
+  }) {
+    return Bill(
+      description: description ?? this.description,
+      clientId: clientId ?? this.clientId,
+      clientDocument: clientDocument ?? this.clientDocument,
+      clientName: clientName ?? this.clientName,
+      total: total ?? this.total,
+      isPaid: isPaid ?? this.isPaid,
+      canBeEdited: canBeEdited ?? this.canBeEdited,
+      paymentDate: paymentDate ?? this.paymentDate,
+      editedDate: editedDate ?? this.editedDate,
+      products: products ?? this.products,
+    );
+  }
 }
 
 @embedded

@@ -36,10 +36,16 @@ class ClientBillForm extends HookWidget {
                         ? bill!.clientDocument
                         : cliente.value!.document,
                     textAlign: TextAlign.center),
-                // trailing: IconButton(
-                //   icon: const Icon(Icons.edit),
-                //   onPressed: () {},
-                // ),
+                trailing: IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) =>
+                          ClientSelector(onSelect: onChangeClient),
+                    );
+                  },
+                ),
               )
             : ListTile(
                 tileColor: Colors.grey[100],
